@@ -22,6 +22,7 @@
             overflow: auto;
             border-left: 1px solid rgba(255,255,255,0.04);
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
         }
         #menu h3 { margin: 0 0 10px 0; font-size: 18px; }
         #menu .controls { margin-bottom: 10px; display:flex; gap:8px; flex-wrap:wrap; }
@@ -65,15 +66,28 @@
             color: #fff;
             border: none;
         }
-        /* small screens: collapse menu */
+
+        /* Styles for mobile devices */
         @media (max-width: 640px) {
-            #menu { width: 220px; }
+            #mobile-message {
+                display: block; /* Show the message */
+                width: 100%;
+                height: 100vh;
+                background-color: #0b0b0b;
+                box-sizing: border-box;
+            }
+            canvas#worldCanvas, #menu {
+                display: none; /* Hide the canvas and menu */
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <canvas id="worldCanvas"></canvas>
+        <div id="mobile-message" style="display: none; text-align: center; padding-top: 50px; font-size: 1.2rem; color: white;">
+            Please change to desktop mode to view
+        </div>
+        <canvas id="worldCanvas" style="display: block;"></canvas>
 
         <aside id="menu" aria-label="Cards menu">
             <h3>Cards Menu</h3>
