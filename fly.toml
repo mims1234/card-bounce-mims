@@ -7,6 +7,25 @@ app = 'card-bounce-mims'
 primary_region = 'bom'
 
 [build]
+  # Install serve to run the static site
+  # This command installs the 'serve' package globally within the build environment
+  # It's a lightweight static file server perfect for this kind of project.
+  # It will serve files from the directory you specify (here, the root of the app)
+  # on the port specified by the internal_port (8080).
+  # The -s flag makes it serve single-page applications correctly,
+  # falling back to index.html for routes not found.
+  # -l 8080 specifies the port to listen on.
+  # -d false disables directory listings.
+  # --host 0.0.0.0 makes it accessible from outside the container.
+  # We use a script to run it because 'npx serve' is the recommended way.
+  # The `npm install serve` is a fallback if npx is not available or behaves unexpectedly in some environments.
+  # However, `npx serve` is generally preferred as it doesn't require global installation.
+  # For Fly.io, it's better to install it locally or use npx.
+  # Let's try a simpler approach: just use npx serve directly in the command.
+  # The build command is for preparing the application, not for running it.
+  # The actual command to run the app should be in the `command` field of `[http_service]`.
+  # So, we don't need a build command for 'serve' itself, but we need to ensure 'serve' is available.
+  # `npx` is available in Fly.io's base Node.js image, so we can use it directly.
 
 [http_service]
   internal_port = 8080
@@ -15,6 +34,14 @@ primary_region = 'bom'
   auto_start_machines = true
   min_machines_running = 0
   processes = ['app']
+  # Command to start the static file server
+  # 'npx serve -s -l 8080' means:
+  # npx: execute a package
+  # serve: the package name (a static file server)
+  # -s: single-page application mode (serves index.html for unknown routes)
+  # -l 8080: listen on port 8080
+  command = "npx serve -s -l 8080"
+
 
 [[vm]]
   memory = '1gb'
