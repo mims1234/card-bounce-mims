@@ -1,16 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bouncy Cards with Matter.js</title>
     <style>
-        body { margin: 0; }
-        canvas { width: 100%; height: 100%; }
+        html, body { height: 100%; margin: 0; }
+        /* force a single row layout: canvas + right menu */
+        .container { display: flex; height: 100vh; overflow: hidden; flex-wrap: nowrap; align-items: stretch; }
+        /* canvas occupies remaining space; min-width:0 allows it to shrink inside flex */
+        canvas#worldCanvas { order: 1; flex: 1 1 auto; min-width: 0; height: 100vh; display: block; background: #0b0b0b; width: calc(100% - 280px); box-sizing: border-box; }
+        /* Right menu (fixed width) */
+        #menu {
+            order: 2;
+            width: 280px;
+            flex: 0 0 280px;
+            background: #111;
+            color: #fff;
+            padding: 12px;
+            box-sizing: border-box;
+            overflow: auto;
+            border-left: 1px solid rgba(255,255,255,0.04);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+        #menu h3 { margin: 0 0 10px 0; font-size: 18px; }
+        #menu .controls { margin-bottom: 10px; display:flex; gap:8px; flex-wrap:wrap; }
+        #menu button.primary {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        #menu button.warn {
+            background: #b91c1c;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        #cardCount { margin-bottom: 8px; color: #cbd5e1; font-size: 13px; }
+        .card-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 12px;
+        }
+        .card-item img { width: 28px; height: 40px; object-fit: cover; border-radius: 4px; margin-right: 8px; }
+        .card-item button {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 4px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        button.success, #restartBtn.success {
+            background: #16a34a;
+            color: #fff;
+            border: none;
+        }
+        /* small screens: collapse menu */
+        @media (max-width: 640px) {
+            #menu { width: 220px; }
+        }
     </style>
 </head>
 <body>
-    <canvas id="worldCanvas"></canvas>
+    <div class="container">
+        <canvas id="worldCanvas"></canvas>
+
+        <aside id="menu" aria-label="Cards menu">
+            <h3>Cards Menu</h3>
+
+            <div class="controls">
+                <button id="addCardBtn" class="primary">Add Card</button>
+                <button id="removeLastBtn" class="warn">Remove Last</button>
+                <button id="restartBtn" class="success">Restart</button>
+                <button id="explosionToggleBtn" class="primary">Push Effect: Off</button>
+            </div>
+
+            <div style="margin:8px 0; font-size:13px;">
+                <label>Gravity <span id="gravityValue">1</span></label>
+                <input id="gravitySlider" type="range" min="0" max="2" step="0.05" value="1" style="width:100%" />
+            </div>
+
+            <div style="margin:8px 0; font-size:13px;">
+                <label>Time Scale <span id="timescaleValue">1</span></label>
+                <input id="timescaleSlider" type="range" min="0.2" max="1.5" step="0.05" value="1" style="width:100%" />
+            </div>
+
+            <div style="margin:8px 0; font-size:13px;">
+                <label>Card Bounciness <span id="bouncinessValue">0.8</span></label>
+                <input id="bouncinessSlider" type="range" min="0" max="1" step="0.05" value="0.8" style="width:100%" />
+            </div>
+
+            <div style="margin:8px 0; font-size:13px;">
+                <label>Explosion Strength <span id="explosionStrengthValue">0.05</span></label>
+                <input id="explosionStrengthSlider" type="range" min="0" max="1" step="0.05" value="0.05" style="width:100%" />
+            </div>
+
+            <div style="margin:8px 0; font-size:13px;">
+                <label>Preset</label>
+                <select id="presetSelect" style="width:100%; padding:6px; margin-top:6px;">
+                    <option value="default">Default</option>
+                    <option value="moon">Moon</option>
+                    <option value="pinball">Pinball</option>
+                    <option value="tornado">Tornado</option>
+                </select>
+            </div>
+
+            <div id="cardCount">0 / 20</div>
+
+            <div id="cardList" aria-live="polite"></div>
+        </aside>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.14.2/matter.min.js"></script>
     <script src="script.js"></script>
 </body>
