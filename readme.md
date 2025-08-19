@@ -1,0 +1,15 @@
+const cardImages = [
+    "https://asapi.shoob.gg/site/api/cardr/65696850a7f891630355b3a3?size=400",
+    "https://asapi.shoob.gg/site/api/cardr/65696850a7f891630355b394?size=400",
+    "https://asapi.shoob.gg/site/api/cardr/65696850a7f891630355b352?size=400",
+    "https://asapi.shoob.gg/site/api/cardr/65696850a7f891630355b34f?size=400",
+    "https://asapi.shoob.gg/site/api/cardr/65696850a7f891630355b34c?size=400",
+    "https://asapi.shoob.gg/site/api/cardr/6518eec0ced7e81609e1ded1?size=400",
+    "https://asapi.shoob.gg/site/api/cardr/6518eec0ced7e81609e1debf?size=400",
+    "https://asapi.shoob.gg/site/api/cardr/6518eec0ced7e81609e1dea1?size=400",
+    "https://asapi.shoob.gg/site/api/cardr/6518eec0ced7e81609e1de9b?size=400",
+    "https://asapi.shoob.gg/site/api/cardr/6518eec0ced7e81609e1de71?size=400",
+    "https://asapi.shoob.gg/site/api/cardr/6518eec0ced7e81609e1de11?size=400",
+    "https://asapi.shoob.gg/site/api/cardr/6518eec0ced7e81609e1de0b?size=400",
+    "https://asapi.shoob.gg/site/api/cardr/6518eec0ced7e81609e1de02?size=400",
+];
